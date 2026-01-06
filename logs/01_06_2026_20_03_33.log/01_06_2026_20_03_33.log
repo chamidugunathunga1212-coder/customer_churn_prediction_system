@@ -1,0 +1,8 @@
+[ 2026-01-06 20:03:34,501 ] - root - INFO - Exporting data from Mongodb to feature store
+[ 2026-01-06 20:03:37,532 ] - root - INFO - Dataframe created successfully from the Mongodb collection
+[ 2026-01-06 20:03:37,548 ] - root - INFO - Dataframe shape : (7043, 21)
+[ 2026-01-06 20:03:37,548 ] - root - INFO - Exporting data into feature store
+[ 2026-01-06 20:03:37,579 ] - root - INFO - Data exported successfully into feature store
+[ 2026-01-06 20:03:37,579 ] - root - INFO - Splitting data into train and test set
+[ 2026-01-06 20:03:37,595 ] - root - INFO - Creating ingested directory if not available
+[ 2026-01-06 20:03:37,611 ] - root - INFO - Train and test file created successfully
