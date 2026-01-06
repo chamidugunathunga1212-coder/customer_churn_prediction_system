@@ -1,4 +1,0 @@
-[ 2026-01-06 16:46:54,150 ] - root - INFO - csv to json conversion started
-[ 2026-01-06 16:46:54,279 ] - root - INFO - csv to json conversion completed
-[ 2026-01-06 16:46:54,279 ] - root - INFO - Data push to Mongodb started
-[ 2026-01-06 16:47:10,970 ] - root - INFO - Data push to Mongodb completed

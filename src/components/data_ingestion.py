@@ -105,6 +105,11 @@ class DataIngestion:
             dir_path = os.path.dirname(self.train_file_path)
             os.makedirs(dir_path,exist_ok=True)
 
+            if "_id" in train_Set.columns.tolist():
+                train_Set = train_Set.drop(columns=['_id'],axis=True)
+            if "_id" in test_set.columns.tolist():
+                test_set = test_set.drop(columns=['_id'],axis=True)
+
             train_Set.to_csv(self.train_file_path,index=False,header=True)
             
             test_set.to_csv(self.test_file_path,index=False,header=True)
