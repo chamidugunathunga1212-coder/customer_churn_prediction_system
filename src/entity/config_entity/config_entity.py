@@ -147,4 +147,30 @@ class Data_Transformation_Config:
             )
 
         except Exception as e:
-            raise CustomerException(e,sys)        
+            raise CustomerException(e,sys)    
+
+
+
+class Model_Train_Config:
+
+    def __init__(self,training_pipeline_config:Training_Pipeline_Config):
+
+        try:
+            
+            self.model_train_dir = os.path.join(
+                training_pipeline_config.artifact_dir,
+                constans.MODEL_TRAINER_DIR_NAME
+            )
+
+            self.model_train_file_path = os.path.join(
+                self.model_train_dir,
+                constans.MODEL_TRAINER_TRAINED_MODEL_DIR,
+                constans.MODEL_TRAINER_TRAINED_MODEL_NAME
+            )
+
+            self.threshold_accuracy = constans.MODEL_TRAINER_ACCURACY_THRESHOLD
+
+
+        except Exception as e:
+            raise CustomerException(e,sys)
+                    
