@@ -108,3 +108,43 @@ class Data_Validation_Config:
 
         except Exception as e:
             raise CustomerException(e,sys)        
+        
+
+
+class Data_Transformation_Config:
+
+    def __init__(self,training_pipeline_config:Training_Pipeline_Config):
+        try:
+            
+            self.data_transformation_dir = os.path.join(
+                training_pipeline_config.artifact_dir,
+                constans.DATA_TRANSFORMATION_DIR_NAME
+            )
+
+            self.transformed_data_dir = os.path.join(
+                self.data_transformation_dir,
+                constans.DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR,
+            )
+
+            self.transformed_object_dir = os.path.join(
+                self.data_transformation_dir,
+                constans.DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR
+            )
+
+            self.transformed_train_file_path = os.path.join(
+                self.transformed_data_dir,
+                constans.DATA_TRANSFORMATION_TRAIN_FILE_PATH,
+            )
+
+            self.transformed_test_file_path = os.path.join(
+                self.transformed_data_dir,
+                constans.DATA_TRANSFORMATION_TEST_FILE_PATH
+            )
+
+            self.transformed_object_file_path = os.path.join(
+                self.transformed_object_dir,
+                constans.PREPROCESSING_OBJECT_FILE_NAME
+            )
+
+        except Exception as e:
+            raise CustomerException(e,sys)        
