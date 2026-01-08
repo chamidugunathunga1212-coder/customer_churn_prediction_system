@@ -58,10 +58,10 @@ class ModelTrainer:
                 "Decision Tree": DecisionTreeClassifier(class_weight="balanced"),
                 "Logistic Regression": LogisticRegression(class_weight="balanced",max_iter=1000),
                 "Naive Bayes": GaussianNB(),
-                "Gradient Boosting": GradientBoostingClassifier(verbose=1),
-                "K Neighbors": KNeighborsClassifier(),
+                "Gradient Boosting": GradientBoostingClassifier(),
+                "KNN": KNeighborsClassifier(),
                 "XG Boost": XGBClassifier(),
-                "SVC": SVC(verbose=1)
+                "SVC": SVC()
 
             }
 
@@ -98,10 +98,13 @@ class ModelTrainer:
                     "learning_rate": [0.05, 0.1]
                 },
 
-                "XGBoost": {
+                "XG Boost": {
                     "n_estimators": [100, 200],
                     "max_depth": [3, 6],
-                    "learning_rate": [0.05, 0.1]
+                    "learning_rate": [0.05, 0.1],
+                    "random_state":42,
+                    "use_label_encoder":False,
+                    "eval_metric":"logloss",
                 }
             }
 

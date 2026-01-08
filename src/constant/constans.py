@@ -77,3 +77,14 @@ MODEL_TRAINER_TRAINED_MODEL_DIR: str = "trained_model"
 MODEL_TRAINER_TRAINED_MODEL_NAME: str = "model.pkl"
 MODEL_TRAINER_ACCURACY_THRESHOLD: float = 0.6
 
+"""
+    model_evaluation modules needs these constants
+
+"""
+
+# Model Evaluation
+MODEL_EVALUATION_DIR_NAME = "model_evaluation"
+MODEL_EVALUATION_REPORT_NAME = "evaluation_report.json"
+
+MODEL_EVALUATION_MIN_F1_SCORE = 0.60
+MODEL_EVALUATION_MIN_AUC_SCORE = 0.65

@@ -173,4 +173,22 @@ class Model_Train_Config:
 
         except Exception as e:
             raise CustomerException(e,sys)
-                    
+        
+class ModelEvaluationConfig:
+    def __init__(self, training_pipeline_config: Training_Pipeline_Config):
+        try:
+            self.model_evaluation_dir = os.path.join(
+                training_pipeline_config.artifact_dir,
+                constans.MODEL_EVALUATION_DIR_NAME
+            )
+
+            self.evaluation_report_file_path = os.path.join(
+                self.model_evaluation_dir,
+                constans.MODEL_EVALUATION_REPORT_NAME
+            )
+
+            self.minimum_f1_score = constans.MODEL_EVALUATION_MIN_F1_SCORE
+            self.minimum_auc_score = constans.MODEL_EVALUATION_MIN_AUC_SCORE
+
+        except Exception as e:
+            raise CustomerException(e,sys)    

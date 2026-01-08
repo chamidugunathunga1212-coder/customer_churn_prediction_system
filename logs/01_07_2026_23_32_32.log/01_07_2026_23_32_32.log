@@ -1,3 +1,0 @@
-[ 2026-01-07 23:32:33,352 ] - root - INFO - Exporting data from Mongodb to feature store
-[ 2026-01-07 23:33:24,332 ] - root - ERROR - Error in exporting collection as dataframe
-[ 2026-01-07 23:33:24,332 ] - root - ERROR - Error in main.py

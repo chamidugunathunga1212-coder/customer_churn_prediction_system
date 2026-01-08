@@ -116,6 +116,8 @@ class Data_Validation:
                 dir_path = os.path.dirname(dirft_report_file_path)
                 os.makedirs(dir_path,exist_ok=True)
                 write_yaml_file(file_path=dirft_report_file_path,content=report)  
+                
+            return status
 
         except Exception as e:
             raise CustomerException(e,sys)                  
