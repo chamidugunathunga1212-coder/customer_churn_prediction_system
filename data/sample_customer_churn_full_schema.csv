@@ -1,0 +1,7 @@
+customerID,gender,SeniorCitizen,Partner,Dependents,tenure,PhoneService,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies,Contract,PaperlessBilling,PaymentMethod,MonthlyCharges,TotalCharges,Churn
+0001-ABCD,Male,0,Yes,No,5,Yes,No,DSL,No,Yes,No,No,No,No,Month-to-month,Yes,Electronic check,70.35,351.75,No
+0002-EFGH,Female,1,No,No,42,Yes,Yes,Fiber optic,Yes,No,Yes,Yes,Yes,Yes,One year,No,Mailed check,89.1,3742.2,Yes
+0003-IJKL,Female,0,Yes,Yes,12,No,No,No,No,No,No,No,No,No,Two year,Yes,Bank transfer (automatic),29.85,358.2,No
+0004-ABCD,Male,0,Yes,No,5,Yes,No,DSL,No,Yes,No,No,No,No,Month-to-month,Yes,Electronic check,70.35,351.75,No
+0005-EFGH,Female,1,No,No,42,Yes,Yes,Fiber optic,Yes,No,Yes,Yes,Yes,Yes,One year,No,Mailed check,89.1,3742.2,Yes
+0006-IJKL,Female,0,Yes,Yes,12,No,No,No,No,No,No,No,No,No,Two year,Yes,Bank transfer (automatic),29.85,358.2,No

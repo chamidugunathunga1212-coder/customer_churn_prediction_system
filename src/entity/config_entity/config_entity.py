@@ -192,3 +192,14 @@ class ModelEvaluationConfig:
 
         except Exception as e:
             raise CustomerException(e,sys)    
+        
+class PredictionConfig:
+    MODEL_PATH = os.path.join(
+        "final_pikels",
+        "model.pkl"
+    )
+
+    PREPROCESSOR_PATH = os.path.join(
+        "final_pikels",
+        "preprocessor.pkl"
+    )        

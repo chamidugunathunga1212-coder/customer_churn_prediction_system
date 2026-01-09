@@ -189,6 +189,9 @@ class ModelTrainer:
                 raise CustomerException(f"Best model accuracy {best_test_f1} is below expected threshold",sys)
 
             save_object(self.model_train_config.model_train_file_path,best_model)
+
+            save_object("final_pikels/model.pkl",best_model)
+            
             logging.info(f"Best Model Saved: {best_model_name} ")   
             
             return best_model,best_model_name,best_train_f1,best_test_f1

@@ -63,15 +63,30 @@ def save_object(file_path: str, obj: object) -> None:
         raise CustomerException(e, sys) from e
     
 
-def load_object(file_path: str, ) -> object:
+# def load_object(file_path: str, ) -> object:
+#     try:
+#         if not os.path.exists(file_path):
+#             raise Exception(f"The file: {file_path} is not exists")
+#         with open(file_path, "rb") as file_obj:
+#             print(file_obj)
+#             return pickle.load(file_obj)
+#     except Exception as e:
+#         raise CustomerException(e, sys) from e 
+
+
+def load_object(file_path: str) -> object:
     try:
+        if not isinstance(file_path, (str, os.PathLike)):
+            raise TypeError(f"Expected file path as str, got {type(file_path)}")
+
         if not os.path.exists(file_path):
-            raise Exception(f"The file: {file_path} is not exists")
+            raise FileNotFoundError(f"The file {file_path} does not exist")
+
         with open(file_path, "rb") as file_obj:
-            print(file_obj)
             return pickle.load(file_obj)
+
     except Exception as e:
-        raise CustomerException(e, sys) from e 
+        raise CustomerException(e, sys) from e
 
 
 def load_numpy_array_data(file_path: str) -> np.array:

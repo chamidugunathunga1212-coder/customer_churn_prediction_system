@@ -190,6 +190,9 @@ class Data_transformation:
             # save the preprocessing object
             save_object(self.data_transformation_config.transformed_object_file_path,self.preprocessor)
 
+            ## save to the final_pickls folder
+            save_object("final_pikels/preprocessor.pkl",self.preprocessor)
+
             data_transforemed_artifact = Data_transformation_artifact(
                 transformed_train_file_path=self.data_transformation_config.transformed_train_file_path,
                 transformed_test_file_path=self.data_transformation_config.transformed_test_file_path,
