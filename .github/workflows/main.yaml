@@ -72,8 +72,6 @@
 #         run: docker system prune -f        
 
 
-
-
 name: ML-FastAPI-CICD
 
 on:
@@ -140,6 +138,7 @@ jobs:
     needs: build-and-push
     runs-on: self-hosted
     steps:
+      # Configure AWS credentials for self-hosted runner
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -147,26 +146,25 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      # Login to ECR
       - name: Login to ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      # Stop old container safely
       - name: Stop old container
         run: |
-          if docker ps -q --filter "name=churn-api"; then
-            echo "Stopping old container..."
-            docker stop churn-api
-            docker rm churn-api
-          else
-            echo "No running container found"
-          fi
+          echo "Checking for existing container..."
+          docker rm -f churn-api || echo "No running container to remove"
 
+      # Pull latest image
       - name: Pull latest image
         run: |
           IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
           echo "Pulling latest image: $IMAGE_URI"
           docker pull $IMAGE_URI
 
+      # Run new container
       - name: Run container
         run: |
           IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
@@ -175,5 +173,6 @@ jobs:
             -p 8000:8000 \
             $IMAGE_URI
 
+      # Cleanup dangling Docker objects
       - name: Cleanup
         run: docker system prune -f
