@@ -1,3 +1,79 @@
+# name: ML-FastAPI-CICD
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# permissions:
+#   contents: read
+#   id-token: write
+
+# jobs:
+#   integration:
+#     name: Continuous Integration
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Lint
+#         run: echo "Lint step placeholder"
+#       - name: Tests
+#         run: echo "Test step placeholder"
+
+
+#   build-and-push:
+#     name: Build & Push to ECR
+#     needs: integration
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+
+#       - name: Configure AWS credentials
+#         uses: aws-actions/configure-aws-credentials@v2
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: ${{ secrets.AWS_REGION }}
+
+#       - name: Login to ECR
+#         id: login-ecr
+#         uses: aws-actions/amazon-ecr-login@v1
+
+#       - name: Build & Push Image
+#         run: |
+#           docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest .
+#           docker push ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest 
+          
+#   deploy:
+#     name: Deploy to EC2
+#     needs: build-and-push
+#     runs-on: self-hosted
+
+#     steps:
+#       - name: Login to ECR
+#         uses: aws-actions/amazon-ecr-login@v1
+
+#       - name: Stop old container
+#         run: |
+#           docker ps -q --filter "name=churn-api" && docker stop churn-api && docker rm churn-api || true
+
+#       - name: Pull latest image
+#         run: |
+#           docker pull ${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+
+#       - name: Run container
+#         run: |
+#           docker run -d \
+#             --name churn-api \
+#             -p 8000:8000 \
+#             ${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+
+#       - name: Cleanup
+#         run: docker system prune -f        
+
+
+
+
 name: ML-FastAPI-CICD
 
 on:
@@ -10,17 +86,24 @@ permissions:
   id-token: write
 
 jobs:
+  # ------------------------
+  # Continuous Integration
+  # ------------------------
   integration:
     name: Continuous Integration
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Lint
         run: echo "Lint step placeholder"
+
       - name: Tests
         run: echo "Test step placeholder"
 
-
+  # ------------------------
+  # Build & Push Docker Image to ECR
+  # ------------------------
   build-and-push:
     name: Build & Push to ECR
     needs: integration
@@ -28,6 +111,35 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      # Configure AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # Login to Amazon ECR
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # Build and push Docker image
+      - name: Build & Push Image
+        run: |
+          IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+          echo "Building Docker image: $IMAGE_URI"
+          docker build -t $IMAGE_URI .
+          docker push $IMAGE_URI
+
+  # ------------------------
+  # Deploy to EC2 (Self-Hosted Runner)
+  # ------------------------
+  deploy:
+    name: Deploy to EC2
+    needs: build-and-push
+    runs-on: self-hosted
+    steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -39,34 +151,29 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build & Push Image
-        run: |
-          docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest .
-          docker push ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest 
-          
-  deploy:
-    name: Deploy to EC2
-    needs: build-and-push
-    runs-on: self-hosted
-
-    steps:
-      - name: Login to ECR
-        uses: aws-actions/amazon-ecr-login@v1
-
       - name: Stop old container
         run: |
-          docker ps -q --filter "name=churn-api" && docker stop churn-api && docker rm churn-api || true
+          if docker ps -q --filter "name=churn-api"; then
+            echo "Stopping old container..."
+            docker stop churn-api
+            docker rm churn-api
+          else
+            echo "No running container found"
+          fi
 
       - name: Pull latest image
         run: |
-          docker pull ${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+          IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+          echo "Pulling latest image: $IMAGE_URI"
+          docker pull $IMAGE_URI
 
       - name: Run container
         run: |
+          IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
           docker run -d \
             --name churn-api \
             -p 8000:8000 \
-            ${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+            $IMAGE_URI
 
       - name: Cleanup
-        run: docker system prune -f        
+        run: docker system prune -f
